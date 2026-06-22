@@ -4,6 +4,8 @@ require('dotenv').config()
 const app = express();
 const districtRoutes = require('./routes/districts')
 const provincesRoutes = require('./routes/provinces')
+const stationsRoutes = require('./routes/stations')
+const vehiclesRoutes = require('./routes/vehicles')
 
 const port = process.env.PORT || 5000;
 
@@ -56,6 +58,8 @@ app.get('/v1/api', (req, res) => {
 // ============= ROUTES ============
 app.use('/v1/api/provinces/',provincesRoutes)
 app.use('/v1/api/districts/',districtRoutes)
+app.use('/v1/api/stations/',stationsRoutes)
+app.use('/v1/api/vehicles/',vehiclesRoutes)
 // ============= ROUTES ============
 
 // -- CHECK SERVER HEALTH
