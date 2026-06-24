@@ -23,10 +23,10 @@ const swaggerOptions = {
       description: 'A simple Express API with Swagger documentation',
     },
     servers: [
-      {
-        url: `http://localhost:${port}`,
-        description: 'Local server',
-      },
+      // {
+      //   url: `http://localhost:${port}`,
+      //   description: 'Local server',
+      // },
       // You can add your Azure URL here later!
       { url: 'https://webapi-sandbox-fecvb2esf4cehuhr.southeastasia-01.azurewebsites.net/', description: 'Production server' }
     ],
@@ -40,6 +40,65 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // 4. Mount the Swagger UI dashboard
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+/**
+ * @swagger
+ * tags:
+ * name: Users
+ * description: Endpoints for user management
+ */
+
+// ==========================================
+// API ENDPOINTS
+// ==========================================
+
+/**
+ * @swagger
+ * /users:
+ * get:
+ * summary: Retrieve a list of users
+ * tags: [Users]  # <--- This puts the endpoint under the "Users" title
+ * responses:
+ * 200:
+ * description: A list of users.
+ */
+app.get('/users', (req, res) => {
+  // res.json([{ id: 1, name: 'John Doe' }]);
+});
+
+/**
+ * @swagger
+ * /users:
+ * post:
+ * summary: Create a new user
+ * tags: [Users]  # <--- This groups it under the same title
+ * responses:
+ * 201:
+ * description: User created successfully.
+ */
+app.post('/users', (req, res) => {
+  res.status(201).send('User created');
+});
+
+/**
+ * @swagger
+ * /users/{id}:
+ * delete:
+ * summary: Delete a user by ID
+ * tags: [Users] 
+ * parameters:
+ * - in: path
+ * name: id
+ * required: true
+ * schema:
+ * type: integer
+ * responses:
+ * 200:
+ * description: User deleted.
+ */
+app.delete('/users/:id', (req, res) => {
+  res.send(`User ${req.params.id} deleted`);
+});
 
 app.use(cors());
 app.use(express.json());
