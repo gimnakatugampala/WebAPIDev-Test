@@ -39,13 +39,7 @@ jobs:
       contents: read 
 
     steps:
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B989AF9C7AD44B57AA512CFFBE19A44A }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5157E654D19649168580284E4B8D9505 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C1EB100B69654D22898A804B6F1AC665 }}
-
+     
       - name: Deploy Container to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
