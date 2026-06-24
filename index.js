@@ -6,103 +6,21 @@ const districtRoutes = require('./routes/districts')
 const provincesRoutes = require('./routes/provinces')
 const stationsRoutes = require('./routes/stations')
 const vehiclesRoutes = require('./routes/vehicles')
+const { swaggerSpec, swaggerUi } = require('./swagger')
 
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
 
 const port = process.env.PORT || 5000;
 
 
-// 1. Define the Swagger options
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0', // Standard OpenAPI version
-    info: {
-      title: 'Web API Dev Test',
-      version: '1.0.0',
-      description: 'A simple Express API with Swagger documentation',
-    },
-    servers: [
-      // {
-      //   url: `http://localhost:${port}`,
-      //   description: 'Local server',
-      // },
-      // You can add your Azure URL here later!
-      { url: 'https://webapi-sandbox-fecvb2esf4cehuhr.southeastasia-01.azurewebsites.net/', description: 'Production server' }
-    ],
-  },
-  // 2. Tell Swagger where to find your API designs (in this case, this same file)
-  apis: ['./index.js'], 
-};
 
-// 3. Initialize the Swagger specification
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-// 4. Mount the Swagger UI dashboard
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-/**
- * @swagger
- * tags:
- * name: Users
- * description: Endpoints for user management
- */
-
-// ==========================================
-// API ENDPOINTS
-// ==========================================
-
-/**
- * @swagger
- * /users:
- * get:
- * summary: Retrieve a list of users
- * tags: [Users]  # <--- This puts the endpoint under the "Users" title
- * responses:
- * 200:
- * description: A list of users.
- */
-app.get('/users', (req, res) => {
-  // res.json([{ id: 1, name: 'John Doe' }]);
-});
-
-/**
- * @swagger
- * /users:
- * post:
- * summary: Create a new user
- * tags: [Users]  # <--- This groups it under the same title
- * responses:
- * 201:
- * description: User created successfully.
- */
-app.post('/users', (req, res) => {
-  res.status(201).send('User created');
-});
-
-/**
- * @swagger
- * /users/{id}:
- * delete:
- * summary: Delete a user by ID
- * tags: [Users] 
- * parameters:
- * - in: path
- * name: id
- * required: true
- * schema:
- * type: integer
- * responses:
- * 200:
- * description: User deleted.
- */
-app.delete('/users/:id', (req, res) => {
-  res.send(`User ${req.params.id} deleted`);
-});
 
 app.use(cors());
 app.use(express.json());
 
+// 4. Mount the Swagger UI dashboard
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, res) => {
   res.redirect('/api-docs');
@@ -113,32 +31,32 @@ app.get('/v1/api', (req, res) => {
     name: 'SL Police Tuktuk Monitoring API',
     endpoints: {
       provinces: {
-        'GET /api/provinces': 'List all provinces',
-        'GET /api/provinces/:id': 'Get a single province',
-        'GET /api/provinces/:id/districts': 'List districts in a province',
+        'GET /api/v1/provinces': 'List all provinces',
+        'GET /api/v1/provinces/:id': 'Get a single province',
+        'GET /api/v1/provinces/:id/districts': 'List districts in a province',
       },
       districts: {
-        'GET /api/districts': 'List all districts (optional ?province_id=)',
-        'GET /api/districts/:id': 'Get a single district',
-        'GET /api/districts/:id/stations': 'List stations in a district',
+        'GET /api/v1/districts': 'List all districts (optional ?province_id=)',
+        'GET /api/v1/districts/:id': 'Get a single district',
+        'GET /api/v1/districts/:id/stations': 'List stations in a district',
       },
       stations: {
-        'GET /api/stations': 'List all stations (optional ?district_id=)',
-        'GET /api/stations/:id': 'Get a single station',
-        'GET /api/stations/:id/vehicles': 'List vehicles assigned to a station',
+        'GET /api/v1/stations': 'List all stations (optional ?district_id=)',
+        'GET /api/v1/stations/:id': 'Get a single station',
+        'GET /api/v1/stations/:id/vehicles': 'List vehicles assigned to a station',
       },
       vehicles: {
-        'GET /api/vehicles': 'List all vehicles, paginated (optional ?station_id=&page=&limit=)',
-        'GET /api/vehicles/:id': 'Get a single vehicle',
-        'GET /api/vehicles/:id/pings': 'List ping history for a vehicle, paginated (optional ?from=&to=&page=&limit=)',
-        'GET /api/vehicles/:id/pings/latest': 'Get the most recent ping (current location) for a vehicle',
+        'GET /api/v1/vehicles': 'List all vehicles, paginated (optional ?station_id=&page=&limit=)',
+        'GET /api/v1/vehicles/:id': 'Get a single vehicle',
+        'GET /api/v1/vehicles/:id/pings': 'List ping history for a vehicle, paginated (optional ?from=&to=&page=&limit=)',
+        'GET /api/v1/vehicles/:id/pings/latest': 'Get the most recent ping (current location) for a vehicle',
       },
       pings: {
-        'GET /api/pings': 'List all pings, paginated (optional ?vehicle_id=&from=&to=&page=&limit=)',
-        'GET /api/pings/:id': 'Get a single ping',
+        'GET /api/v1/pings': 'List all pings, paginated (optional ?vehicle_id=&from=&to=&page=&limit=)',
+        'GET /api/v1/pings/:id': 'Get a single ping',
       },
       health: {
-        'GET /api/health': 'Service health check',
+        'GET /api/v1/health': 'Service health check',
       },
     },
   });
