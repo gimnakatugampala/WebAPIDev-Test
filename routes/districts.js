@@ -29,4 +29,35 @@ router.get('/:id', (req, res) => {
 });
 
 
+// @method GET 
+// @route /v1/api/districts/:id/stations
+// @access public 
+// @desc Get Stations according to districts id
+router.get('/:id/stations', (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!db.districtsById.has(id)) {
+    return res.status(404).json({ error: `Districts ${req.params.id} not found` });
+  }
+
+  const stations = db.stationsByDistrictId.get(id) || [];
+  res.json({ data: stations, meta: { total: stations.length, district_id: id } });
+
+});
+
+// GET /api/stations?district_id=1
+router.get('/', (req, res) => {
+  let stations = db.stations;
+
+  if (req.query.district_id !== undefined) {
+    const districtId = Number(req.query.district_id);
+    if (!db.districtsById.has(districtId)) {
+      return res.status(404).json({ error: `District ${req.query.district_id} not found` });
+    }
+    stations = db.stationsByDistrictId.get(districtId) || [];
+  }
+
+  res.json({ data: stations, meta: { total: stations.length } });
+});
+
 module.exports = router;

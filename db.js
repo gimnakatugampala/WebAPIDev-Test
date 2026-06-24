@@ -18,12 +18,29 @@ const byId = (arr) => {
   return map;
 };
 
+const groupBy = (arr, key) => {
+  const map = new Map();
+  for (const item of arr) {
+    const k = item[key];
+    if (!map.has(k)) map.set(k, []);
+    map.get(k).push(item);
+  }
+  return map;
+};
+
+
 
 const provincesById = byId(provinces);
 const districtsById = byId(districts);
 const stationsById = byId(stations);
 const vehiclesById = byId(vehicles);
 const pingsById = byId(pings);
+
+const districtsByProvinceId = groupBy(districts, 'province_id');
+const stationsByDistrictId = groupBy(stations, 'district_id');
+const vehiclesByStationId = groupBy(vehicles, 'station_id');
+const pingsByVehicleId = groupBy(pings, 'vehicle_id');
+
 
 module.exports = {
     provinces,
@@ -35,5 +52,9 @@ module.exports = {
     districtsById,
     stationsById,
     vehiclesById,
-    pingsById
+    pingsById,
+    districtsByProvinceId,
+    stationsByDistrictId,
+    vehiclesByStationId,
+    pingsByVehicleId
 }

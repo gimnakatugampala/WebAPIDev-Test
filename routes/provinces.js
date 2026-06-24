@@ -28,5 +28,21 @@ router.get('/:id', (req, res) => {
   res.json({ data: province });
 });
 
+// @method GET 
+// @route /v1/api/provinces/:id/districts
+// @access public 
+// @desc Get districts according to province id
+router.get('/:id/districts', (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!db.provincesById.has(id)) {
+    return res.status(404).json({ error: `Province ${req.params.id} not found` });
+  }
+
+  const districts = db.districtsByProvinceId.get(id) || [];
+  res.json({ data: districts, meta: { total: districts.length, province_id: id } });
+
+});
+
 
 module.exports = router;

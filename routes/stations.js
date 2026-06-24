@@ -28,4 +28,22 @@ router.get('/:id', (req, res) => {
   res.json({ data: station });
 });
 
+
+// @method GET 
+// @route /v1/api/stations/:id/vehicles
+// @access public 
+// @desc Get vehicles according to station id
+router.get('/:id/vehicles', (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!db.stationsById.has(id)) {
+    return res.status(404).json({ error: `station ${req.params.id} not found` });
+  }
+
+  const vehicles = db.vehiclesByStationId.get(id) || [];
+  res.json({ data: vehicles, meta: { total: vehicles.length, station_id: id } });
+
+});
+
+
 module.exports = router;
