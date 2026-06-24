@@ -10,7 +10,7 @@ env:
   # Replace with your actual ACR login server (e.g., yourregistry.azurecr.io)
   REGISTRY_NAME: 'webapidevtestregistry.azurecr.io' 
   # Replace with the exact name of your new Container Web App in Azure
-  APP_NAME: 'web-api-dev-test' 
+  APP_NAME: 'webapi-sandbox' 
 
 jobs:
   build-and-push:
