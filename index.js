@@ -7,15 +7,46 @@ const provincesRoutes = require('./routes/provinces')
 const stationsRoutes = require('./routes/stations')
 const vehiclesRoutes = require('./routes/vehicles')
 
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
 const port = process.env.PORT || 5000;
 
+
+// 1. Define the Swagger options
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0', // Standard OpenAPI version
+    info: {
+      title: 'Web API Dev Test',
+      version: '1.0.0',
+      description: 'A simple Express API with Swagger documentation',
+    },
+    servers: [
+      {
+        url: `http://localhost:${port}`,
+        description: 'Local server',
+      },
+      // You can add your Azure URL here later!
+      { url: 'https://webapi-sandbox-fecvb2esf4cehuhr.southeastasia-01.azurewebsites.net/', description: 'Production server' }
+    ],
+  },
+  // 2. Tell Swagger where to find your API designs (in this case, this same file)
+  apis: ['./index.js'], 
+};
+
+// 3. Initialize the Swagger specification
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+// 4. Mount the Swagger UI dashboard
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(cors());
 app.use(express.json());
 
 
 app.get('/', (req, res) => {
-  res.send('Hello, World!');
+  res.redirect('/api-docs');
 });
 
 app.get('/v1/api', (req, res) => {
