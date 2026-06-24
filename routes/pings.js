@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('../db');
 const { paginate } = require('../pagination');
 
+
 const router = express.Router();
 
 // GET /api/pings?vehicle_id=1&from=...&to=...&page=1&limit=100
