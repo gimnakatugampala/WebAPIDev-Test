@@ -50,4 +50,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.APP_NAME }}
+          # Use the publish profile instead of the OIDC login
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           images: '${{ env.REGISTRY_NAME }}/express-api:${{ github.sha }}'
