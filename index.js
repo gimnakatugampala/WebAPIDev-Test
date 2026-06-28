@@ -15,10 +15,10 @@ app.get('/', (req, res) => {
 });
 
 
-app.use('/provinces',ProvincesRouter)
-app.use('/districts',DistrictRouter)
-app.use('/stations',StationsRouter)
-app.use('/vehicles',VehicleRouter)
+app.use('/v1/api/provinces',ProvincesRouter)
+app.use('/v1/api/districts',DistrictRouter)
+app.use('/v1/api/stations',StationsRouter)
+app.use('/v1/api/vehicles',VehicleRouter)
 
 
 

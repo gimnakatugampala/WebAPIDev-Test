@@ -1,6 +1,6 @@
 
 const express = require('express');
-const seedData = require('../db')
+const {seedData} = require('../db')
 
 
 

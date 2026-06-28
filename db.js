@@ -18,8 +18,8 @@ let seedData = {
 try {
     const DATA_PATH = path.join(__dirname, '.', 'seed.json');
 
-    const raw = JSON.parse(fs.readFileSync(DATA_PATH, 'utf-8'));
-    seedData = JSON.parse(raw);
+    seedData = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+
 } catch (error) {
     console.warn("Could not load seed.json. Running with empty arrays.");
 }
