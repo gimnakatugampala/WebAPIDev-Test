@@ -12,12 +12,12 @@ const router = express.Router();
 // ---------------------------------------------------------
 
 // GET /provinces (Collection)
-router.get('/provinces', (req, res) => {
+router.get('/', (req, res) => {
     res.status(200).json(seedData.provinces);
 });
 
 // GET /provinces/:province-id (Atomic member)
-router.get('/provinces/:provinceId', (req, res) => {
+router.get('/:provinceId', (req, res) => {
     const id = req.params.provinceId;
     const province = seedData.provinces.find(p => p.id == id);
     
