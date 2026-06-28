@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('../db');
-const paginate = require('../pagination')
+const { paginate } = require('../pagination')
 
 const router = express.Router();
 
@@ -23,6 +23,8 @@ router.get('/', (req, res) => {
   const { data, meta } = paginate(vehicles, req);
   res.json({ data, meta });
 });
+
+
 // @method GET 
 // @route /v1/api/vehicles/:id
 // @access public 
