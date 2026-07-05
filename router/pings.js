@@ -3,7 +3,6 @@ const express = require('express');
 const {seedData} = require('../db')
 
 
-
 const router = express.Router();
 
 
