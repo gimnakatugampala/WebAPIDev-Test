@@ -1,6 +1,7 @@
 
 const express = require('express');
 const {seedData} = require('../db')
+const authenticate = require('../middleware/auth'); // Import the auth middleware
 
 
 
@@ -68,5 +69,33 @@ router.get('/:vehicleId/last-position', (req, res) => {
     res.status(200).json(vehiclePings);
 });
 
+
+// POST /vehicles/:vehicleId/pings
+// key_v01 : Key
+router.post('/:vehicleId/pings', authenticate, (req, res) => {
+    const { vehicleId } = req.params;
+    const { latitude, longitude } = req.body;
+
+    // Validate inputs
+    if (!latitude || !longitude) {
+        return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const newPing = {
+        id: `p-${Date.now()}`,
+        vehicleId,
+        latitude,
+        longitude,
+        timestamp: new Date().toISOString()
+    };
+
+    seedData.pings.push(newPing);
+
+    // Set the Location header as instructed
+    res.setHeader('Location', `/v1/api/vehicles/${vehicleId}/pings/${newPing.id}`);
+
+    // Return 201 Created
+    res.status(201).json(newPing);
+});
 
 module.exports = router
