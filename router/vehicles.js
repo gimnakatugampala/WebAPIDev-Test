@@ -69,4 +69,30 @@ router.get('/:vehicleId/last-position', (req, res) => {
 });
 
 
+// POST /vehicles/:vehicleId/pings
+router.post('/:vehicleId/pings', (req, res) => {
+    const { vehicleId } = req.params;
+    const { latitude, longitude } = req.body;
+
+    // 1. Create the new ping object
+    const newPing = {
+        id: `p-${Date.now()}`, // Generating a simple unique ID
+        vehicleId,
+        latitude,
+        longitude,
+        timestamp: new Date().toISOString()
+    };
+
+    // 2. Add to your data store (assuming seedData is mutable in your app)
+    seedData.pings.push(newPing);
+
+    // 3. Set the Location header
+    const location = `/vehicles/${vehicleId}/pings/${newPing.id}`;
+    res.setHeader('Location', location);
+
+    // 4. Return 201 Created
+    res.status(201).json(newPing);
+});
+
+
 module.exports = router
