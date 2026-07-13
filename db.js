@@ -24,4 +24,10 @@ try {
     console.warn("Could not load seed.json. Running with empty arrays.");
 }
 
-module.exports = {seedData}
+// Add to db.js
+const getDeviceKey = (vehicleId) => {
+    const vehicle = seedData.vehicles.find(v => v.id == vehicleId);
+    return vehicle ? vehicle.device_id : null;
+};
+
+module.exports = { seedData, getDeviceKey };
