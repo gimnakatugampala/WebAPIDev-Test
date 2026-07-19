@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const { connectDB } = require('./db');
 const ProvincesRouter = require('./router/provinces')
 const DistrictRouter = require('./router/districts')
 const StationsRouter = require('./router/stations')
@@ -26,10 +27,15 @@ app.use('/v1/api/vehicles',VehicleRouter)
 app.use('/v1/api/pings',PingsRouter)
 
 
-
-
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running at ${port}`);
-});
+// Connect to MongoDB first, then start the server.
+// If the DB connection fails, the app exits instead of serving empty responses.
+connectDB()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server running at ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error('❌ Failed to connect to MongoDB:', error.message);
+    process.exit(1);
+  });
