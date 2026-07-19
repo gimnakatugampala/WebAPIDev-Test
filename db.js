@@ -1,33 +1,46 @@
+// db.js
+const { MongoClient } = require('mongodb');
+const dns = require('dns');
+require('dotenv').config();
 
-const express = require('express');
+// Set Google DNS servers for lookups (mirrors seed.js)
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
-const fs = require('fs');
-const path = require('path');
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@webapi.n4vrktr.mongodb.net/?appName=WEBAPI`;
 
-// Load seed data (Mocking the seed.json mentioned in the slide)
-// In a real scenario, ensure seed.json exists in the same directory or update the path.
-let seedData = {
-    provinces: [],
-    districts: [],
-    stations: [],
-    vehicles: [],
-    pings: [] 
-};
+const client = new MongoClient(uri);
+let db = null;
 
+/**
+ * Opens the MongoDB connection (call once, at server startup).
+ */
+async function connectDB() {
+    if (db) return db;
 
-try {
-    const DATA_PATH = path.join(__dirname, '.', 'seed.json');
-
-    seedData = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
-
-} catch (error) {
-    console.warn("Could not load seed.json. Running with empty arrays.");
+    await client.connect();
+    db = client.db('tuk_tuk_db');
+    console.log('✅ Connected to MongoDB (tuk_tuk_db)');
+    return db;
 }
 
-// Add to db.js
-const getDeviceKey = (vehicleId) => {
-    const vehicle = seedData.vehicles.find(v => v.id == vehicleId);
-    return vehicle ? vehicle.device_id : null;
-};
+/**
+ * Returns the active db handle. Throws if connectDB() hasn't run yet,
+ * so a route can never silently query a null connection.
+ */
+function getDB() {
+    if (!db) {
+        throw new Error('Database not initialized. Call connectDB() before handling requests.');
+    }
+    return db;
+}
 
-module.exports = { seedData, getDeviceKey };
+/**
+ * Looks up a vehicle's GPS device id.
+ */
+async function getDeviceKey(vehicleId) {
+    const database = getDB();
+    const vehicle = await database.collection('vehicles').findOne({ id: Number(vehicleId) });
+    return vehicle ? vehicle.device_id : null;
+}
+
+module.exports = { connectDB, getDB, getDeviceKey };

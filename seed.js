@@ -1,4 +1,4 @@
-// seed.js
+// seed.js - INSERT DATA VIA SEED.JSON
 const { MongoClient } = require('mongodb');
 const fs = require('fs');
 const dns = require('dns');
